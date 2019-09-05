@@ -1,0 +1,27 @@
+version: '2'  
+services:  
+        id-server-1:
+            image: id
+            container_name: id-server-1
+            expose:
+                - 5185
+                - 5187
+                - 5189
+        id-server-2:
+            image: id
+            depends_on: 
+                - "id-server-1"
+            container_name: id-server-2
+            expose:
+                - 5185
+                - 5187
+                - 5189
+        id-server-3:
+            image: id
+            depends_on: 
+                - "id-server-1"
+            container_name: id-server-3
+            expose:
+                - 5185
+                - 5187
+                - 5189
