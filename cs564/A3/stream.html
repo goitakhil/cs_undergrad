@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.datum {
+			color: blue;
+			fill: blue;
+		}
+
+		div.tooltip {
+			position: absolute;
+			text-align: center;
+			width: 100px;
+			height: 20px;
+			padding: 3px;
+			font: 14px sans-serif;
+			background: white;
+			border: 0px;
+			pointer-events: none;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Stream Graph</h1>
+	<a href="radialtree.html">PREVIOUS</a>
+	<a href="spline.html">NEXT</a>
+	<p>
+		Below is a stream graph of word frequency. There is only one data point for each word, so the values are 0 everywhere
+		but index 1.
+	</p>
+	<svg></svg>
+	<script>
+		var width = 900;
+		var margins = {
+			"left": 75,
+			"right": 75,
+			"top": 10,
+			"bottom": 100
+		};
+		var height = 400;
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", height + margins.bottom + margins.top)
+			.attr("class", "frame")
+		// Define the div for the tooltip
+		var div = d3.select("body").append("div")
+			.attr("class", "tooltip")
+			.style("opacity", 0);
+
+		d3.csv("data/words.csv")
+			.then(data => {
+				var xmin = 0;
+				var xmax = 2;
+				var xAxis = d3.scaleLinear()
+					.domain([xmin, xmax])
+					.rangeRound([0, width])
+				var yAxis = d3.scaleLinear()
+					.domain([0, 2000])
+					.range([height, 0])
+
+				var stack = d3.stack()
+					.keys(["year", "people", "way", "man", "day", "thing", "child", "Mr", "government", "work"])
+					.order(d3.stackOrderAscending)
+					.offset(d3.stackOffsetSilhouette)
+
+				var area = d3.area()
+					.x((d, i) => xAxis(i))
+					.y0(d => yAxis(d[0]))
+					.y1(d => yAxis(d[1]))
+					.curve(d3.curveCardinal)
+				console.log(data);
+				var stackdata = stack(data);
+
+				var ymin = d3.min(stackdata, d => d3.min(d, d => d3.min(d)));
+				var ymax = d3.max(stackdata, d => d3.max(d, d => d3.max(d)));
+				yAxis.domain([ymin, ymax]);
+
+				svg.selectAll("path.area")
+					.data(stackdata)
+					.enter()
+					.append("path")
+					.style("stroke", "black")
+					.attr("d", d => area(d))
+					.attr("fill", d => d3.interpolateCool(Math.random()))
+					.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+					.on("mouseover", function (d) {
+						div.transition()
+							.duration(100)
+							.style("opacity", .9);
+						div.html(d.key)
+							.style("left", (d3.event.pageX) + "px")
+							.style("top", (d3.event.pageY - 28) + "px");
+					})
+					.on("mouseout", function (d) {
+						div.transition()
+							.duration(100)
+							.style("opacity", 0);
+					});
+
+
+				svg.append("g")
+					.attr("class", "axis")
+					.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+					.call(d3.axisBottom(xAxis))
+					.call(g => g.append("text")
+						.attr("x", width / 2)
+						.attr("y", 30)
+						.attr("fill", "#000")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Index"));
+
+			});
+	</script>
+</body>
+
+</html>

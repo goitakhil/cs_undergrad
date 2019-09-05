@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Team Bass</title>
+    <h1>Rust PL</h1>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Documentation</a></li>
+        <li><a href="translators.html">Translators and Installation</a></li>
+        <li><a href="introProg.html">Introductionary Programs</a></li>
+        <li><a href="complexProg.html">More Complex Programs</a></li>
+        <li><a href="comparison.html">Comparison</a></li>
+        <li><a href="server.html">HTTP Server</a></li>
+    </ul>
+</head>
+
+
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #0000ff">use</span> std::io::{Read, Write, BufReader, BufRead};
+<span style="color: #0000ff">use</span> std::net::{TcpListener, TcpStream};
+<span style="color: #0000ff">use</span> std::fs::File;
+
+<span style="color: #0000ff">fn</span> handle_client(<span style="color: #0000ff">mut</span> stream: TcpStream) {
+	<span style="color: #008000">//Buffer the input so we know when the browser is done sending.</span>
+	<span style="color: #0000ff">let</span> <span style="color: #0000ff">mut</span> reader = BufReader::new(stream);
+	<span style="color: #0000ff">let</span> <span style="color: #0000ff">mut</span> request: String = <span style="color: #a31515">&quot;&quot;</span>.to_string();
+	
+	<span style="color: #008000">//Read the input by lines and strip CR characters. HTTP is a Windows-style standard.</span>
+    <span style="color: #0000ff">for</span> line in reader.by_ref().lines() {
+		<span style="color: #0000ff">let</span> q = line.unwrap();
+		<span style="color: #0000ff">let</span> s = q.trim_matches(<span style="color: #a31515">&#39;\r&#39;</span>);
+        <span style="color: #0000ff">if</span> s == <span style="color: #a31515">&quot;&quot;</span> {
+            <span style="color: #0000ff">break</span>;
+        } <span style="color: #0000ff">else</span> {
+			<span style="color: #008000">//Add a space for the split later on.</span>
+			<span style="color: #0000ff">let</span> r = s.to_string() + <span style="color: #a31515">&quot; &quot;</span>;
+			request.push_str(&amp;r);
+		}
+    }
+    
+    <span style="color: #008000">//Get stream back from the buffer.</span>
+	stream = reader.into_inner();
+	<span style="color: #008000">//Tokenize the request</span>
+    <span style="color: #0000ff">let</span> <span style="color: #0000ff">mut</span> reply: String = <span style="color: #a31515">&quot;&quot;</span>.to_string();
+    <span style="color: #0000ff">let</span> tokens: Vec&lt;&amp;<span style="color: #0000ff">str</span>&gt; = request.split(<span style="color: #a31515">&quot; &quot;</span>).collect();
+    <span style="color: #008000">//Check if the request is valid</span>
+    <span style="color: #0000ff">if</span> tokens[0] == <span style="color: #a31515">&quot;GET&quot;</span> {
+        <span style="color: #0000ff">if</span> tokens[2] == <span style="color: #a31515">&quot;HTTP/1.1&quot;</span> {
+			<span style="color: #0000ff">let</span> filename: String;
+			<span style="color: #0000ff">if</span> tokens[1] == <span style="color: #a31515">&quot;/&quot;</span> {
+				filename = <span style="color: #a31515">&quot;/index.html&quot;</span>.to_owned();
+			} <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> !tokens[1].contains(<span style="color: #a31515">&quot;.&quot;</span>){
+				filename = format!(<span style="color: #a31515">&quot;{}{}&quot;</span>, tokens[1], <span style="color: #a31515">&quot;.html&quot;</span>);
+			} <span style="color: #0000ff">else</span> {
+				filename = tokens[1].to_string();
+			}
+			println!(<span style="color: #a31515">&quot;{}&quot;</span>, filename);
+			<span style="color: #008000">//Open the file reqested. Requests should not have an explicit .html.</span>
+			<span style="color: #0000ff">let</span> <span style="color: #0000ff">mut</span> f;
+            <span style="color: #0000ff">match</span> File::open(format!(<span style="color: #a31515">&quot;.{}&quot;</span>, filename)) {
+				<span style="color: #008000">//Handle error by throwing 404.</span>
+				Err(e) =&gt; {  println!(<span style="color: #a31515">&quot;{}&quot;</span>, e.to_string());
+							 <span style="color: #0000ff">let</span> _ = stream.write_all(b<span style="color: #a31515">&quot;HTTP/1.1 404 Not Found\n\n&quot;</span>);
+							 <span style="color: #0000ff">let</span> _ = stream.write_all(b<span style="color: #a31515">&quot;&lt;!DOCTYPE HTML&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;404 - this page does not exist&lt;/title&gt;&lt;/head&gt;&lt;h1&gt;404 - This Page does not exist&lt;/h1&gt;&lt;/html&gt;&quot;</span>);
+							 <span style="color: #0000ff">let</span> _ = stream.flush();
+							 <span style="color: #0000ff">return</span>;
+							 }
+				<span style="color: #008000">//Else, return file handle.</span>
+				Ok(file) =&gt; {f = file;}
+			};
+			
+			<span style="color: #008000">//Read in the file and stream it to the browser.</span>
+			<span style="color: #008000">//The underscores are our way of telling rust to ignore errors.</span>
+			<span style="color: #008000">//We should actually check them for real code.</span>
+            <span style="color: #0000ff">let</span> _ = f.read_to_string(&amp;<span style="color: #0000ff">mut</span> reply);
+            <span style="color: #0000ff">let</span> v = reply.into_bytes();
+            <span style="color: #0000ff">let</span> _ = stream.write_all(b<span style="color: #a31515">&quot;HTTP/1.1 200 OK\n\n&quot;</span>);
+            <span style="color: #0000ff">let</span> _ = stream.write_all(&amp;v);
+        }
+    }
+    <span style="color: #008000">//Make sure we pushed all the data before we close the connection.</span>
+	<span style="color: #0000ff">let</span> _ = stream.flush();
+}
+
+<span style="color: #0000ff">fn</span> main(){
+	<span style="color: #0000ff">let</span> listener = TcpListener::bind(<span style="color: #a31515">&quot;127.0.0.1:8888&quot;</span>).unwrap();
+	<span style="color: #008000">//Accept connections and process them, spawning a new thread for each one</span>
+	<span style="color: #0000ff">for</span> stream in listener.incoming() {
+		<span style="color: #0000ff">match</span> stream {
+			Ok(stream) =&gt; {
+				handle_client(stream);
+			}
+			Err(_) =&gt; { <span style="color: #008000">/* connection failed */</span> }
+		}
+	}
+}
+</pre></td></tr></table></div>
+

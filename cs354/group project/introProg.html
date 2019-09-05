@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Team Bass</title>
+    <h1>Rust PL</h1>
+    <ul>
+		<li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Documentation</a></li>
+        <li><a href="translators.html">Translators and Installation</a></li>
+        <li><a href="introProg.html">Introductionary Programs</a></li>
+        <li><a href="complexProg.html">More Complex Programs</a></li>
+        <li><a href="comparison.html">Comparison</a></li>
+        <li><a href="server.html">HTTP Server</a></li>
+    </ul>
+</head>
+
+<body>
+
+<h1>Introductionary Programs</h1>
+
+<p>
+  <ul>
+    <li>
+      <a href ="https://doc.rust-lang.org/book/getting-started.html">
+        Getting Started With Rust
+      </a>
+    </li>
+    <li>
+      <a href ="http://rustbyexample.com">
+        Rust By Example
+      </a>
+    </li>
+    <li>
+      <a href ="https://doc.rust-lang.org/reference.html">
+        Rust API Reference
+      </a>
+    </li>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn main(){
+          <br>println!("Hello World!");
+        <br>}
+        <br>// Hello World!
+    	</pre></code></div>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn main(){
+          <br>let x = 5 + /* 90 + */ 5;
+          <br>println!("`x` Value = {}", x);
+        <br>}
+        <br>// `x` Value = 10
+    	</pre></code></div>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn main(){
+        <br>println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
+        <br>// Alice, this is Bob. Bob, this is Alice
+        <br>println!("{subject} {verb} {object}",
+         object="the lazy dog",
+         subject="the quick brown fox",
+         verb="jumps over");
+         <br>// the quick brown fox jumps over the lazy dog
+         <br>}
+    	</pre></code></div>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn print_sum(x: i32, y: i32) {
+          <br>println!("sum is: {}", x + y);
+        <br>}
+        <br>
+        fn main() {
+          <br>print_sum(5, 6);
+        <br>}
+        <br>// sum is: 11
+    	</pre></code></div>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn print_sum(x: i32, y: i32) -> i32 {
+          x+y
+        }
+        <br>
+        fn main() {
+        <br>println!("sum is: {}", print_sum(5, 6));;
+        <br>}
+        <br>// sum is: 11
+    	</pre></code></div>
+
+      <br>
+      <div style="border: 2px solid black;">
+    	<code>
+    	<pre>fn main() {
+          <br>fn plus_one(i: i32) -> i32 { i + 1 }
+          <br>let f = plus_one;
+          <br>let six = f(5);
+          <br>println!("six is: {}", six);;
+        <br>}
+        <br>//six is: 6
+    	</pre></code></div>
+
+  </ul>
+</p>
+
+</body>

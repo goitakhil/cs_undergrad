@@ -1,0 +1,7 @@
+Flask
+Flask-Session
+gunicorn
+numpy
+pandas
+sklearn
+matplotlib

@@ -1,0 +1,42 @@
+Homework Ch 3
+
+Breadth First Search:
+This search method is preferable for cases where each step is the same cost.
+In this case, the shallowest node (the least steps) is always an optimal 
+solution. This solution is only preferable if there is sufficient memory.
+
+Uniform Cost Search:
+This search method is preferable when steps have different costs, but the
+optimal solution will have the least steps. Because it expands the lowest
+cost option first, it will use less memory and time than breadth first will.
+
+Depth First Search:
+If searching a tree, depth first search can find a long path solution faster
+and using much less memory than breadth first searches. However, the caveat is
+that loops can be a problem, and for shallow solutions it can be slow.
+
+Depth Limited Search:
+In reality, depth limited search will be better than depth first search under
+most circumstances. Because it searches all solutions to a given depth, it is
+complete in graph situations where depth first may not be. It still may not
+be optimal in all cases.
+
+Iterative Deepening Search:
+This search is optimal where depth first wouldn't be because it checks each
+each depth completly before proceeding to the next depth. This search may
+not be faster than uniform cost or bfs, but uses much less memory.
+
+Bidirectional Search:
+This search can be more efficient than any other when the problem is a graph,
+and a search can be worked in reverse with identical results as forward.
+
+3.6 a:
+Initial State:  All map regions are empty.
+Actions:        Color a region one of four colors.
+Transitions:    If any two adjacent regions are the same color, the state and
+                all children cannot be the goal state.
+Goal Test:      All regions are colored and no adjacent regions are the same color
+Path Cost:      All steps are the same cost, and the solution will have the same
+                number of steps as the map has regions.
+
+

@@ -1,0 +1,61 @@
+Feedback comments for -> TYLERBEVAN,
+
+Grading Scripts:
+================
+-> passing scripts, good.
+
+Code Quality:
+================
+-> Avoid global variables - they are a very poor solution for creating shared data visibility amongst functions, files, or structs.
+your code -> struct Results results; //safer way would be to create one during runtime in main() and pass it to other functions that need it.
+-> Good code formatting.
+-> -3 points, Issues with comments.
+your code -> lines like this results.digits[nextChar - 48]++; should be commented to explain non-trivial code...
+-> Good comments beside the very important note above...
+-> Good variable names.
+-> Good use of an int[] for digit count storage, and a struct for "Results".. good thinking but poor global access decision.
+-> Great use of functions to modularize code! REALLY good here.
+-> Poor job not passing variables between functions.
+-> -1 point, main() return non-zero, see comments below...
+
+README:
+================
+-> Good README. Follow the same format for future projects.
+-> use correct computer science jargon, avoid statements like this "provided known good program"
+
+NOTES TO STUDENT:
+================
+In C a return of non-zero from main() is used to notify the caller of your program that it was a non-successful execution. Please use return 0 from main() to indicate success... exit(0) will also accomplish this but it's standard to use the return 0;
+
+Please keep note that <your location>/backpack directory should ONLY contain the following (viewed with ls -a ):
+.  ..  CS253-1-f16
+
+Please keep note that <your location>/backpack/CS253-1-f16 directory should ONLY contain the following (viewed with ls -a ):
+. .. p1 p2
+
+Please keep note that <your location>/backpack/CS253-1-f16/p1 directory should ONLY contain the following (viewed with ls -a ):
+. ..  backpack.sh data grader main.c Makefile README.md
+
+When developing code you should make it a high priority to keep your code as readable as possible - by using well named variables/functions, proper spacing & code formatting, by avoiding global variables (keeping the scope of variables within a small readable range), adhering to the "principle of least astonishment", using good/concise comments that are between 3 ~ 7 words to explain conceptually difficult or non-trivial code, and by keeping your logic the least complicated as possible. Most of the cost of software engineering projects is in maintaining the code, not in the initial development. So if you find yourself being a software dev engineer one day, you'll most certainly have Test & QA engineers scrutinize and debug your code. It is imperative that you don't waste other peoples time struggling to read your code since it will certainly cost your company money, and if continued can cost you your job.
+
+======================
+Grade: 96/100
+======================
+50/50  Grading-Scripts.
+-0     passed...
+36/40  Code-Quality.
+-0     code formatting
+-3     code comments/doc
+-0     code modularity
+-1     code semantics
+10/10  README.md-File.
+-0     used template
+-0     grammar/spelling
+-0     correct statements
+-0     sources
+
+-0     Late-Penalty.
+======================
+
+Cheers,
+Joey.

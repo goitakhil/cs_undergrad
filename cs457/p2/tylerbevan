@@ -1,0 +1,2 @@
+#!/bin/bash
+./pypy/bin/pypy3 -E -O -B main.py $@

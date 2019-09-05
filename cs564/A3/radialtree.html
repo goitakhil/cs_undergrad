@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<script src="js/yaml.js"></script>
+	<style>
+		.link {
+			stroke-width: 1;
+			fill: none;
+			stroke: black;
+		}
+
+		.label {
+			fill: black;
+			stroke: black;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Radial Tree</h1>
+	<a href="treemap.html">PREVIOUS</a>
+	<a href="stream.html">NEXT</a>
+	<p>Below is a radial tree of directories.</p>
+	<svg>
+		<g></g>
+	</svg>
+	<script>
+
+		var width = window.innerWidth * 0.6;
+		var height = width;
+		var margins = {
+			"left": 75,
+			"right": 75,
+			"top": 50,
+			"bottom": 100
+		};
+
+		d3.text("data/treedir.yaml")
+			.then(rawdata => {
+				var yamldata = yaml.load(rawdata);
+				// This makes files appear on the tree, but it's basically unreadable because
+				// they're so close together.
+				//makeChildrenFromFiles(yamldata);
+				var data = d3.hierarchy(yamldata);
+
+				var svg = d3.select('svg')
+					.attr("width", width + margins.left + margins.right)
+					.attr("height", height + margins.bottom + margins.top)
+					.attr("class", "frame")
+
+
+				var tree = d3.tree()
+					.size([2 * Math.PI, height / 3])
+					.separation(function (a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+				data.count();
+
+				var root = tree(data);
+
+				var group = svg.select("g")
+					.attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")")
+
+
+				group.selectAll(".link")
+					.data(root.links())
+					.enter().append("path")
+					.attr("class", "link")
+					.attr("d", d3.linkRadial()
+						.angle(function (d) { return d.x; })
+						.radius(function (d) { return d.y; }));
+
+				var node = group.selectAll(".node")
+					.data(root.descendants())
+					.enter().append("g")
+					.attr("class", function (d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+					.attr("transform", function (d) { return "translate(" + radialPoint(d.x, d.y) + ")"; })
+
+				node.append("text")
+					.attr("dy", "0.31em")
+					.attr("x", function (d) { return d.x < Math.PI === !d.children ? 6 : -6; })
+					.attr("text-anchor", function (d) { return d.x < Math.PI === !d.children ? "start" : "end"; })
+					.attr("transform", function (d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
+					.text(d => d.data.name)
+
+			});
+
+		function radialPoint(x, y) {
+			return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
+		}
+		function makeChildrenFromFiles(d) {
+			if (d.files) {
+				if (!d.children) {
+					d.children = [];
+				}
+				for (i = 0; i < d.files.length; i++) {
+					d.children.push({ name: d.files[i] });
+				}
+			}
+			if (d.children) {
+				for (i = 0; i < d.children.length; i++) {
+					makeChildrenFromFiles(d.children[i]);
+				}
+			}
+		}
+
+	</script>
+</body>
+
+</html>

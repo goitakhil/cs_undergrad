@@ -1,0 +1,1 @@
+i = 0 ; while i < 50 do i = i + 3 ; wr i 

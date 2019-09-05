@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Team Bass</title>
+    <h1>Rust PL</h1>
+    <ul>
+		<li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Documentation</a></li>
+        <li><a href="translators.html">Translators and Installation</a></li>
+        <li><a href="introProg.html">Introductionary Programs</a></li>
+        <li><a href="complexProg.html">More Complex Programs</a></li>
+        <li><a href="comparison.html">Comparison</a></li>
+        <li><a href="server.html">HTTP Server</a></li>
+    </ul>
+</head>
+
+<body>
+
+<h1>More Complex Programs</h1>
+<pre>
+<div style="border: 2px solid black;">
+	<h2>Macros</h2>
+	<code>
+	<pre>
+	// Macros are dynamic code that allows for many cool features,
+	// including the ability to accept any number of parameters. Macros are
+	// functions ending with !
+
+	macro_rules!  total{
+		// Return on a single parameter
+		($x:expr) => ($x);
+
+		// Else, add the head to the tail. Rust will expand to include all values.
+		($x:expr, $($y:expr),+) => ( $x + total!($($y),+) )
+	}
+
+	fn main() {
+	    println!(total!(1u32));
+	    println!("{}",total!(1u32, 2u32));
+	    /* Rust does type checking at compile time and thus you have to use
+	     * a string expansion "{}" to prevent println! from thinking it is being passed
+	     * a non-printable type. Rust is type safe, so we have to trick it.
+	     * We don't know ahead of time what type of number the parameters are.
+	     */
+	    println!("{}", total!(1u32, 2u32, 3u32, 4u32, 5u32, 6u32, 7u32, 8u32, 9u32));
+	}
+	</pre></code></div>
+
+<div style="border: 2px solid black;">
+<h2>Linked List</h2>
+<code>
+<pre>
+	// use aliases all direct children of List into the current scope.
+	use List::*;
+
+	enum List {
+	    // Cons: Tuple struct that wraps an element and a pointer to the next node
+	    Cons(Box&lt;List&gt;, u32),
+	    // Nil: A node that signifies the end of the linked list
+	    Nil,
+	}
+
+	// Methods can be attached to an enum
+	impl List {
+	    // Create an empty list
+	    fn new() -> List {
+	        // `Nil` has type `List`
+	        Nil
+	    }
+
+	    // Consume a list, and return the same list with a new element at its end.
+	    fn append(self, elem: u32) -> List {
+	        // `Cons` also has type List
+	        Cons(Box::new(self), elem)
+	    }
+	     // Return the length of the list
+	    fn len(&self) -> u32 {
+	        // `self` has to be matched, because the behavior of this method
+	        // depends on the variant of `self`
+	        // `self` has type `&List`, and `*self` has type `List`, matching on a
+	        // concrete type `T` is preferred over a match on a reference `&T`
+	        match *self {
+	            // Can't take ownership of the tail, because `self` is borrowed;
+	            // instead take a reference to the tail
+	            Cons(ref tail, _) => 1 + tail.len(),
+	            // Base Case: An empty list has zero length
+	            Nil => 0
+	        }
+	    }
+	    // Return representation of the list as a (heap allocated) string
+	    fn stringify(&self) -> String {
+	        match *self {
+	            Cons(ref tail, head) => {
+	                // `format!` is similar to `print!`, but returns a heap
+	                // allocated string instead of printing to the console
+	                format!("{}, {}", tail.stringify(), head)
+	            },
+	            Nil => {
+	                format!("Nil")
+	            },
+	        }
+	    }
+	}
+
+	fn main() {
+	    // Create an empty linked list
+	    let mut list = List::new();
+	    // Append some elements
+	    list = list.append(1);
+	    list = list.append(2);
+	    list = list.append(3);
+	    // Show the final state of the list
+	    println!("linked list has length: {}", list.len());
+	    println!("{}", list.stringify());
+	}
+</pre>
+</code>
+</div>
+</body>

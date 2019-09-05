@@ -1,0 +1,47 @@
+Ben Macomb (E)
+cs430
+
+Fibonacci Testing plan
+
+The program should output the correct Fibonacci number for a given index n.
+Since it's easy to figure out the first few values of the Fibonacci sequence,
+we can easily compare the output of find_fib(n) with an expected value.
+
+Examples using google test:
+
+// Test positive inputs of n
+TEST(FibonacciTest, testPositiveInputs) {
+    EXPECT_EQ(find_fib(0), 0);
+    EXPECT_EQ(find_fib(1), 1);
+    EXPECT_EQ(find_fib(2), 1);
+    EXPECT_EQ(find_fib(3), 2);
+    ......
+    ......
+    //And so on.
+}
+
+// Test negative inputs of n. Should return some error code (0)
+// if not implementing negative index.
+TEST(FibonacciTest, testNegativeInputs) {
+    EXPECTED_EQ(find_fib(-1), 0)
+    EXPECTED_EQ()
+
+    // or if implementing negative indexes
+
+    EXPECTED_EQ(find_fib(-1), 1);
+    EXPECTED_EQ(find_fib(-2), -1);
+    ...
+    ...
+    // And so on.
+    
+}
+
+// Test non-integer values of n.  Should return some kind of error code or message.
+TEST(FibonacciTest, testNonIntegers) {
+    EXPECTED_EQ(find_fib(0.1), 0);
+    EXPECTED_EQ(find_fib(1.1), 0);
+    EXPECTED_EQ(find_fib("abc"), 0);
+    ....
+    ....
+    // And so on.
+}

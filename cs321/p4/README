@@ -1,0 +1,66 @@
+##########################################
+#                README                  #
+# Tyler Bevan - Stacy Black - Mack Bryan #
+#        GeneBank BTree Project          #
+#             12 Aug, 2016               #
+##########################################
+
+The layout of the BTree file on disk is as follows:
+
+* Header - 12 Bytes
+
+	* Degree - 4 Bytes - int
+	* Substring Length - 4 Bytes - int
+	* Root address - 4 Bytes - int
+
+* Records - 32*t + 12 Bytes where t is the degree.
+
+	* Parent address - 4 Bytes - int
+	* Number of Children - 4 Bytes -int
+	* Number of Keys - 4Bytes - int
+	* Keys - 2t-1 * 8 Bytes - array of longs
+	* Values - 2t-1 * 4 Bytes - array of ints
+	* Children - 2t * 4 Bytes - array of ints
+
+
+
+
+
+#############################################
+#        CACHE SPEED IMPROVEMENTS:          #
+#############################################
+Create with cache size 100 = 306% increase.
+Create with cache size 500 = 318% increase.
+Search with cache size 100 = 1513% increase.
+Search with cache size 500 = 1531% increase.
+
+Create using no cache t=32 sub=7
+real	0m22.053s
+user	0m7.309s
+sys	0m15.353s
+
+Create using cache 100 t=32 sub=7
+real	0m7.211s
+user	0m2.473s
+sys	0m5.346s
+
+Create using cache 500 t=32 sub=7
+real	0m6.942s
+user	0m2.486s
+sys	0m5.050s
+
+Search using no cache t=32 sub=7
+real	0m12.799s
+user	0m4.854s
+sys	0m8.694s
+
+Search using cache 100 t=32 sub=7
+real	0m0.846s
+user	0m1.221s
+sys	0m0.398s
+
+Search using cache 500 t=32 sub=7
+real	0m0.836s
+user	0m1.218s
+sys	0m0.364s
+

@@ -1,0 +1,39 @@
+Tyler Bevan
+Prover Project Readme
+
+My attempts at adding hueristic capabilities to this project were met with
+mixed results. I struggled quite a bit to get the base resolution algorithm
+working, so it was hard to see if my heuristic or the rest of the code was
+causing me problems. After becoming comfortable that the program worked,
+I started with the concept of a set of support. I attempted to implement
+this strategy by ensuring that only one of the two sentences in the
+resolution was part of the original knowledge base. This seemed to have a
+positive effect on the number of steps required, but it wasn't very much.
+Also, it seemed to have a side effect. Sometimes, a run would not finish.
+I suspect that this is due to the fact that it still selects a random pair
+from the knowledge base.
+
+In my attempt to improve the program further, and possibly find the source
+of the errors I encountered, I added a form of input resolution. I did this
+by ensuring that one of the sentences always comes from the original input,
+and retain the set of support style heuristic by ensuring that the other
+sentence is not from the original kb. This combination seems to work ok,
+however to make it work reliably I have to preload the knowledge base with
+all combinations of the sentences in the original knowledge base. This results
+in a set of support that is actually quite a bit larger than the input. As
+a result, for small tests the random algorithm with generally beat the
+heuristic version. However, the heuristic version varies much less than the
+random version, with much smaller peaks. The fact that it usually loses is
+due to a large constant added to the number of steps, n^2 where 2 is the size
+of the input kb.
+
+I attempted to improve the performance further by only combining the refuted
+part of the kb with the rest of the input. This improved the steps to a
+solution by a huge amount by reducing the large constant time. However, it
+also caused the algorithm to sometimes not find a solution at all. This is
+most likely due to the randomness generator used to select the inputs to the
+resolution method. I did not find a way to reduce that problem, so the final
+version of my program uses the large constant time. I recognize that this
+makes my heuristic fairly worthless. However, if tested with an input much
+larger than the largest ones provided, it may perform better since it is more
+predictable.

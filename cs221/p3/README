@@ -1,0 +1,62 @@
+****************
+* Project 3: DoubleLinkedList
+* CS 221
+* 4/6/2016
+* Tyler Bevan
+**************** 
+
+OVERVIEW:
+
+ This Class implements the DoubleLinkedListADT interface.
+ The ListTester class tests the functionality of the
+ list.
+
+
+INCLUDED FILES:
+
+ * IUDoubleLinkedList.java - source file
+ * ListTester.java - source file
+ * README - this file
+
+
+COMPILING AND RUNNING:
+ To compile all classes run:
+ $ javac ListTester.java
+
+ Run the test class with the command:
+ $ java ListTester
+
+ The results of the tests will be printed to standard out (console).
+
+
+PROGRAM DESIGN AND IMPORTANT CONCEPTS:
+
+ The IUDoubleLinkedList class is designed around a doubly linked list
+ abstract data type. It also implements the ListIterator interface.
+ The class contains head and tail variables to keep track of the list.
+ The methods in the ListIterator class are mostly self contained, with
+ the exception of the remove method. The remove method calls the
+ remove method of IUDoubleLinkedList to prevent the duplication of
+ a large amount of code.
+
+TESTING:
+
+ The ListTester class tests all the method of the list as well as
+ the ListIterator. It uses a method to create a scenario and runs
+ several tests on that scenario. The list uses generics to enforce
+ type safety. The class is restricted in the fact that it cannot contain
+ primitive types (Integer instead of int). This is more of a design
+ restriction than a bug.
+
+DISCUSSION:
+
+ While designing this class I had problems keeping the state of the list
+ consistent between an Iterator and the normal methods. This was particularly
+ a problem with the iterator's remove method. Eventually I decided to 
+ have the remove method call the parent list's remove method, as it
+ was already fully designed and contained quite a bit of logic already.
+ This way I did not have to duplicate all the logic that keeps the 
+ variables correct.
+ 
+ 
+  

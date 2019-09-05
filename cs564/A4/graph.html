@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.datum {
+			color: blue;
+			fill: blue;
+		}
+
+		.view {
+			fill: none;
+		}
+
+		.axis {
+			fill: white;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>XY Graph</h1>
+	<p>
+		Below is an XY plot of closing stock value over time.
+	</p>
+	<div class='selector'></div>
+	<svg></svg>
+	<script>
+		var width = 900;
+		var margins = {
+			"left": 100,
+			"right": 1,
+			"top": 5,
+			"bottom": 100
+		};
+		var height = 300;
+
+		var data = ["AMD", "AMZN", "INTC", "QCOM"];
+
+		var select = d3.select('div.selector')
+			.append('select')
+			.attr('class', 'select')
+			.on('change', onchange)
+
+		var options = select
+			.selectAll('option')
+			.data(data).enter()
+			.append('option')
+			.text(function (d) { return d; });
+
+		function onchange() {
+			selectValue = d3.select('select').property('value');
+			render(selectValue);
+		};
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", (height + margins.bottom + margins.top) * 2)
+
+		var pricegroup = svg.append('g');
+
+		var volumegroup = svg.append('g')
+			.attr("transform", "translate(0," + (margins.top + margins.bottom + height) + ")");
+
+		var dateParser = d3.timeParse("%Y-%m-%d");
+
+		function render(name) {
+			d3.csv("data/" + name + ".csv", d => ({ date: dateParser(d.Date), high: +d.High, low: +d.Low, volume: +d.Volume }))
+				.then(data => {
+					pricegroup.selectAll("*").remove();
+					volumegroup.selectAll("*").remove();
+					var ymin = d3.min(data, d => d.low);
+					var ymax = d3.max(data, d => d.high);
+					var volmin = d3.min(data, d => d.volume);
+					var volmax = d3.max(data, d => d.volume);
+					var xmin = d3.min(data, d => d.date);
+					var xmax = d3.max(data, d => d.date);
+
+					var xAxis = d3.scaleTime()
+						.domain([xmin, xmax])
+						.rangeRound([0, width])
+					var yAxis = d3.scaleLinear()
+						.domain([ymin, (ymax * 1.1)])
+						.range([height, 0])
+
+					var volAxis = d3.scaleLinear()
+						.domain([volmin, volmax])
+						.range([height, 0])
+
+					var zoom = d3.zoom()
+						.scaleExtent([1, Infinity])
+						.translateExtent([[0, 0], [width, height]])
+						.extent([[0, 0], [width, height]])
+						.on("zoom", zoomed);
+
+					var gpX = pricegroup.append("g")
+						.attr("height", margins.bottom)
+						.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+						.attr("class", "axis axis--x")
+						.call(xAxis);
+
+					var gpY = pricegroup.append("g")
+						.attr("width", margins.left)
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+						.attr("class", "axis axis--y")
+						.call(yAxis);
+
+					var gvX = volumegroup.append("g")
+						.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+						.attr("class", "axis axis--x")
+						.call(xAxis);
+
+					var gvY = volumegroup.append("g")
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+						.attr("class", "axis axis--y")
+						.call(volAxis);
+
+					var areagen = d3.area()
+						.x(d => xAxis(d.date))
+						.y0(d => yAxis(d.low))
+						.y1(d => yAxis(d.high))
+						.curve(d3.curveCardinal)
+					var plot = areagen(data)
+
+					var priceline = pricegroup.append("g")
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+						.append("path")
+						.attr("class", "price")
+						.attr("d", plot)
+						.attr("fill", d => d3.interpolateCool(Math.random()))
+						.style("stroke", "black")
+
+					var linegen = d3.line()
+						.x(d => xAxis(d.date))
+						.y(d => volAxis(d.volume))
+
+					var linedata = linegen(data);
+
+					var volumeline = volumegroup.append("g")
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+						.append("path")
+						.attr("class", "volume")
+						.attr("d", linedata)
+						.attr("stroke", d => d3.interpolateCool(Math.random()))
+						.attr("stroke-width", 2)
+						.style("fill", "none")
+
+					svg.call(zoom);
+
+					function zoomed() {
+						var newXAxis = d3.event.transform.rescaleX(xAxis);
+						areagen.x(d => newXAxis(d.date))
+						var newplot = areagen(data)
+						priceline.attr("d", newplot);
+						gpX.call(d3.axisBottom(newXAxis));
+						linegen.x(d => newXAxis(d.date))
+						var newlinedata = linegen(data);
+						volumeline.attr("d", newlinedata);
+						gvX.call(d3.axisBottom(newXAxis));
+					}
+
+					pricegroup.transition().call(zoom.transform, d3.zoomIdentity);
+					volumegroup.transition().call(zoom.transform, d3.zoomIdentity);
+
+					var priceY = pricegroup.append("g")
+						.attr("class", "axis")
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+
+					priceY.append("rect")
+						.attr("transform", "translate(-" + margins.left + ",0)")
+						.attr("width", margins.left)
+						.attr("height", height + margins.bottom)
+						.attr("fill", "white");
+
+					priceY.call(d3.axisLeft(yAxis))
+
+					priceY.call(g => g.append("text")
+						.attr("x", -height / 2 + 50)
+						.attr("y", -(margins.left - 25))
+						.attr("fill", "#000")
+						.attr("transform", "rotate( 270 )")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Closing Value ($)"));
+
+					var volY = volumegroup.append("g")
+						.attr("class", "axis")
+						.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+
+					volY.append("rect")
+						.attr("transform", "translate(-" + margins.left + ",0)")
+						.attr("width", margins.left)
+						.attr("height", height + margins.bottom)
+						.attr("fill", "white");
+
+					volY.call(d3.axisLeft(volAxis))
+
+				});
+		};
+
+		render(data[0]);
+
+	</script>
+</body>
+
+</html>

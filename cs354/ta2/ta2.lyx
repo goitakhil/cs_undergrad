@@ -1,0 +1,403 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1.1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+Text Assignment 2
+\end_layout
+
+\begin_layout Section*
+Tyler Bevan
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.2
+\end_layout
+
+\begin_layout Subsubsection*
+Pascal:
+\end_layout
+
+\begin_layout Standard
+Function factorial(x: integer): Integer;
+\end_layout
+
+\begin_layout Standard
+Begin
+\end_layout
+
+\begin_layout Standard
+if x = 0 then return x;
+\end_layout
+
+\begin_layout Standard
+factorial := x + factorial ( x - 1 );
+\end_layout
+
+\begin_layout Standard
+End;
+\end_layout
+
+\begin_layout Standard
+If variables were allocated statically, the recursion on x would not work.
+\end_layout
+
+\begin_layout Subsubsection*
+Scheme:
+\end_layout
+
+\begin_layout Standard
+(define (multiplybythree y) 
+\end_layout
+
+\begin_layout Standard
+(define x 3)
+\end_layout
+
+\begin_layout Standard
+(* x y)
+\end_layout
+
+\begin_layout Standard
+)
+\end_layout
+
+\begin_layout Standard
+(define (undo y)
+\end_layout
+
+\begin_layout Standard
+(/ y x)
+\end_layout
+
+\begin_layout Standard
+)
+\end_layout
+
+\begin_layout Standard
+If variables were on the stack, x would not be visible to the undo function.
+ If 
+\begin_inset Quotes eld
+\end_inset
+
+let
+\begin_inset Quotes erd
+\end_inset
+
+ is used instead of 
+\begin_inset Quotes eld
+\end_inset
+
+define
+\begin_inset Quotes erd
+\end_inset
+
+, then this would happen.
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.4
+\end_layout
+
+\begin_layout Subsubsection*
+java:
+\end_layout
+
+\begin_layout Standard
+private int x;
+\end_layout
+
+\begin_layout Standard
+public void fuction(int x){
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+Inside of the function the global variable x is hidden by the local parameter
+ x.
+ (of course, java gets around this with the 
+\begin_inset Quotes eld
+\end_inset
+
+this.x
+\begin_inset Quotes erd
+\end_inset
+
+ syntax)
+\end_layout
+
+\begin_layout Subsubsection*
+C:
+\end_layout
+
+\begin_layout Standard
+function(void){
+\end_layout
+
+\begin_layout Standard
+static int x = 0;
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+Outside of the function the variable x is kept in memory, but is not accessible
+ because its scope is limited to the function.
+\end_layout
+
+\begin_layout Subsubsection*
+another java example:
+\end_layout
+
+\begin_layout Standard
+public class Parent{
+\end_layout
+
+\begin_layout Standard
+private int x;
+\end_layout
+
+\begin_layout Standard
+public static void main(){
+\end_layout
+
+\begin_layout Standard
+aClass.aFunction();
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+}
+\end_layout
+
+\begin_layout Standard
+While in a function of another class, private variables are still stored,
+ but cannot be accessed by the external function.
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.5
+\end_layout
+
+\begin_layout Standard
+inner print a,b # 1 1
+\end_layout
+
+\begin_layout Standard
+middle print a,b # 3 1
+\end_layout
+
+\begin_layout Standard
+outer print a,b # 1 2
+\end_layout
+
+\begin_layout Standard
+—
+\end_layout
+
+\begin_layout Standard
+Code will not compile.
+ Middle block uses local a's value before it is declared.
+\end_layout
+
+\begin_layout Standard
+—
+\end_layout
+
+\begin_layout Standard
+inner print a,b # 3 3
+\end_layout
+
+\begin_layout Standard
+middle print a,b # 3 3
+\end_layout
+
+\begin_layout Standard
+outer print a,b # 1 2
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.7
+\end_layout
+
+\begin_layout Subsection*
+a
+\end_layout
+
+\begin_layout Standard
+The reverse method returns a newly allocated duplicate of the data in reverse
+ order.
+ Because of this, the original list is not getting freed from memory and
+ eventually runs out.
+\end_layout
+
+\begin_layout Subsection*
+b
+\end_layout
+
+\begin_layout Standard
+Because the list_nodes contain a void* pointer to objects, when L is freed
+ it also frees all of the data pointers.
+ The reversed list contains the same pointers, which now point to unallocated
+ memory addresses.
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.14
+\end_layout
+
+\begin_layout Standard
+Static: 1 1 2 2
+\end_layout
+
+\begin_layout Standard
+Dynamic: 1 1 2 1
+\end_layout
+
+\begin_layout Standard
+With static scoping, the global x variable is always used by functions outside
+ of second().
+ Using dynamic scope, the newest x is used which has not gone out of scope
+ yet.
+ The local x gets set to 2, but the global x stays 1.
+\end_layout
+
+\begin_layout Section*
+E3 - Question 3.18
+\end_layout
+
+\begin_layout Standard
+Shallow:
+\end_layout
+
+\begin_layout Standard
+1 0
+\end_layout
+
+\begin_layout Standard
+2 0
+\end_layout
+
+\begin_layout Standard
+3 0
+\end_layout
+
+\begin_layout Standard
+4 0
+\end_layout
+
+\begin_layout Standard
+Shallow binding uses the newest in-scope variable, which is local in the
+ first print and global in the second.
+\end_layout
+
+\begin_layout Standard
+Deep:
+\end_layout
+
+\begin_layout Standard
+1 0
+\end_layout
+
+\begin_layout Standard
+5 2
+\end_layout
+
+\begin_layout Standard
+0 0
+\end_layout
+
+\begin_layout Standard
+4 4
+\end_layout
+
+\begin_layout Standard
+Deep binding uses the x that was in scope when set_x and print_x were passed
+ as fuction pointers.
+ So, when P or S get called, global x is used inside foo().
+ When set_x or print_x are called directly, the local x is used.
+\end_layout
+
+\end_body
+\end_document

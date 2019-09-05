@@ -1,0 +1,1 @@
+x = 0 ; i = 0 ; while i < 50 do begin x = x + i ; i = i + 1 end ; wr x 

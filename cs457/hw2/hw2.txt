@@ -1,0 +1,30 @@
+Homework Chapter 2
+Tyler Bevan
+CS 457 - Intro to AI
+
+2.3
+    a. false, if the agent has sufficent information to make a rational decision, and memory of past choices, additional information is not strictly needed.
+    b. true, if the parameters of the environment require past knowledge for rationality.
+    c. false, there must be a performance measure, and not all agents will perform properly in an envirnment.
+    d. false, some inputs may or may not be passed from the program to a function.
+    e. true, if the function can be properly defined it can be implemented.
+    f. true, if an agent moves in a random direction and the performance measure is moving in any direction, then it is rational.
+    g. true, a given agent can be rational in two environments as long as the performance measure, actuators needed, and sensors available are the same.
+    h. true, judgement of rationality depends on available input. If the agent has no input, then any choice is rational.
+    i. false, A poker playing agent can choose to fold on any hand with less than 50% chance of winning. This is always a rational choice, but the opponent could always have a better hand.
+
+2.4 "Soccer Game"
+    Performance:    Scores, positive for your team, negative for the other.
+    Environment:    Field, other agents, ball.
+    Actuators:      Ability to move around field, kick the ball.
+    Sensors:        Location of agents, self, and ball throughout the field.
+
+2.10
+    a. No, without knowing the state of the squares around itself, it will not always make the correct choice.
+    b. No, however having state memory will increase the effectiveness of the agent.
+       The agent can make random movements, but with state it can be sure never to enter the same square twice.
+       If the agent finds a corner, then it knows the extents of the board in two directions, so it can avoid trying
+       to cross the outer border. In addition, it will know when all squares have been cleaned.
+    c. If the agent can "see" all the squares at all times, then it can always make the correct choice, as it has all
+       the relevent information.
+

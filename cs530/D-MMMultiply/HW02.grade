@@ -1,0 +1,24 @@
+Anne Brinegar
+Grade: .9
+
+Comments:
+make test did not run tests
+------------output ----------------
+[catherineolschan@onyx D-MMMultiply]$ make
+mkdir -p obj bin
+make -C src all
+make[1]: Entering directory `/home/CATHERINEOLSCHAN/teaching/18FA_CS430/HWK02/CS430-FA18-03/D-MMMultiply/src'
+g++  -I../include -c -o ../obj/matrix_matrix.o matrix_matrix.cpp
+g++  -I../include -c -o ../obj/main.o main.cpp
+g++  -I../include -o ../bin/matrix_matrix ../obj/matrix_matrix.o ../obj/main.o
+make[1]: Leaving directory `/home/CATHERINEOLSCHAN/teaching/18FA_CS430/HWK02/CS430-FA18-03/D-MMMultiply/src'
+make -C test all
+make[1]: Entering directory `/home/CATHERINEOLSCHAN/teaching/18FA_CS430/HWK02/CS430-FA18-03/D-MMMultiply/test'
+g++ -I../include -I../../googletest/googletest/include -c -o ../obj/matrix_matrix_unittest.o matrix_matrix_unittest.cpp
+g++ -I../include -I../../googletest/googletest/include -I../../googletest/googletest/include -I../../googletest/googletest -pthread -c ../../googletest/googletest/src/gtest-all.cc -o ../obj/gtest-all.o
+g++ -lpthread -I../include -I../../googletest/googletest/include -o ../bin/matrix_matrix_unittest ../obj/matrix_matrix_unittest.o ../obj/matrix_matrix.o ../obj/gtest-all.o
+make[1]: Leaving directory `/home/CATHERINEOLSCHAN/teaching/18FA_CS430/HWK02/CS430-FA18-03/D-MMMultiply/test'
+[catherineolschan@onyx D-MMMultiply]$ make test
+make: Nothing to be done for `test'.
+
+I fixed your Makefiles... sortof. I struggled to figure out exaclty what your original plan was. However, you can now run make test at the top level or in the test directory and it will work.

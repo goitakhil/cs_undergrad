@@ -1,0 +1,11 @@
+set terminal png
+set output "28core_plot.png"
+set title "Input vs Performance: 28 cores"
+set xlabel "Input Size"
+set ylabel "Performance (milliseconds)"
+set key right bottom
+plot "log_jacobi_omp_28.log" using 1:2 title "omp" with lines, \
+     "log_jacobi_pthreads_28.log" using 1:2 title "pthreads" with lines, \
+     "log_jacobi_serial_28.log" using 1:2 title "serial" with lines
+
+pause -1 "Hit any key to continue"

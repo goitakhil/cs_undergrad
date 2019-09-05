@@ -1,0 +1,8 @@
+Tyler Bevan
+Chapter 4 homework
+4.1
+a   greedy search because there is only one search tread
+b   breadth first search because all states are expanded
+c   hill climbing because there is no randomness
+d   random walk search because all bad moves are accepted
+e   random search because of the mutation chance

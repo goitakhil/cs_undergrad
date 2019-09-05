@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<script src="js/yaml.js"></script>
+	<style>
+		.box {
+			stroke-width: 2;
+			fill: lightblue;
+			stroke: blue;
+		}
+
+		.label {
+			fill: black;
+			stroke: black;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Treemap</h1>
+	<a href="tree.html">PREVIOUS</a>
+	<a href="radialtree.html">NEXT</a>
+	<p>
+		Below is a treemap of directories.
+	</p>
+	<svg></svg>
+	<script>
+
+		var width = window.innerWidth * 0.8;
+		var height = window.innerHeight * 0.8;
+		var margins = {
+			"left": 75,
+			"right": 75,
+			"top": 50,
+			"bottom": 100
+		};
+
+		d3.text("data/treedir.yaml")
+			.then(rawdata => {
+				// Get the data from text to yaml, then to a d3 hierarchy.
+				var yamldata = yaml.load(rawdata);
+				var data = d3.hierarchy(yamldata);
+
+				var svg = d3.select('svg')
+					.attr("width", width + margins.left + margins.right)
+					.attr("height", height + margins.bottom + margins.top)
+					.attr("class", "frame")
+
+				var tree = d3.treemap()
+					.size([width, height])
+					.paddingOuter(40);
+
+				data.sum(d => d.files.length);
+
+				var root = tree(data);
+
+				// Render the boxes
+				var boxes = svg.selectAll("g")
+					.data(root.descendants())
+					.enter()
+					.append("g")
+					.attr("class", "group")
+					.attr("transform", d => "translate(" + (d.x0 + margins.left) + "," + (d.y0 + margins.top) + ")")
+				boxes
+					.append("rect")
+					.filter(d => d.value > 0)
+					.attr("class", "box")
+					.attr("width", d => d.x1 - d.x0)
+					.attr("height", d => d.y1 - d.y0)
+				boxes
+					.append("text")
+					.filter(d => d.value > 0)
+					.attr("class", "label")
+					.attr("x", 5)
+					.attr("y", 15)
+					.text(d => d.data.name + " files:" + d.value)
+
+			});
+	</script>
+</body>
+
+</html>

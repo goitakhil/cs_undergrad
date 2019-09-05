@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.datum {
+			color: blue;
+			fill: blue;
+		}
+
+		.line {
+			stroke: blue;
+			stroke-width: 4;
+			fill: none;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Spline</h1>
+	<a href="stream.html">PREVIOUS</a>
+	<a href="map.html">NEXT</a>
+	<p>
+		Below is a B-Spline defined by 5 points.
+	</p>
+	<svg></svg>
+	<script>
+		var width = 900;
+		var margins = {
+			"left": 75,
+			"right": 75,
+			"top": 10,
+			"bottom": 100
+		};
+		var height = 400;
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", height + margins.bottom + margins.top)
+			.attr("class", "frame")
+
+		var points = [[0, 0], [5, 5], [10, 2], [15, 5], [20, 15]];
+
+		var ymin = d3.min(points, d => d[1]);
+		var ymax = d3.max(points, d => d[1]);
+		var xmin = d3.min(points, d => d[0]);
+		var xmax = d3.max(points, d => d[0]);
+		var xAxis = d3.scaleLinear()
+			.domain([xmin, xmax])
+			.range([0, width])
+		var yAxis = d3.scaleLinear()
+			.domain([ymin, ymax])
+			.range([height, 0])
+
+		var d3line = d3.line()
+			.curve(d3.curveCardinal)
+			.x(function (d) {
+				return xAxis(d[0]) + margins.left;
+			})
+			.y(function (d) {
+				return yAxis(d[1]) + margins.top;
+			});
+
+		svg.selectAll("circle")
+			.data(points)
+			.enter()
+			.append("circle")
+			.attr("class", "datum")
+			.attr("cy", d => height - height * (d[1] / ymax) + margins.top)
+			.attr("cx", d => width * ((d[0] - xmin) / (xmax - xmin)) + margins.left)
+			.attr("r", 2)
+
+		svg.append("path")
+			.attr('d', d3line(points))
+			.attr("class", "line")
+
+		svg.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+			.call(d3.axisBottom(xAxis))
+			.call(g => g.append("text")
+				.attr("x", width / 2)
+				.attr("y", 30)
+				.attr("fill", "#000")
+				.attr("font-weight", "bold")
+				.attr("text-anchor", "end")
+				.text("X"));
+
+		svg.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+			.call(d3.axisLeft(yAxis))
+			.call(g => g.append("text")
+				.attr("x", -height / 2 + 50)
+				.attr("y", -(margins.left - 25))
+				.attr("fill", "#000")
+				.attr("transform", "rotate( 270 )")
+				.attr("font-weight", "bold")
+				.attr("text-anchor", "end")
+				.text("Y"));
+
+	</script>
+</body>
+
+</html>

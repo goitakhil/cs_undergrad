@@ -1,0 +1,28 @@
+DROP DATABASE IF EXISTS tasks;
+CREATE DATABASE tasks;
+USE tasks;
+
+-- DDL
+CREATE TABLE tag (
+	tag_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	tag_name VARCHAR(128) UNIQUE NOT NULL
+);
+
+CREATE TABLE task (
+	task_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	task_name VARCHAR(256) NOT NULL,
+	task_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	task_due DATE,
+	task_completed BOOLEAN NOT NULL DEFAULT FALSE,
+	task_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
+	FULLTEXT idx (task_name)
+);
+
+CREATE TABLE tag_ref (
+	tag_id INTEGER NOT NULL,
+	task_id INTEGER NOT NULL,
+	FOREIGN KEY (tag_id) REFERENCES tag (tag_id),
+	FOREIGN KEY (task_id) REFERENCES task (task_id),
+	PRIMARY KEY (tag_id, task_id)
+);
+

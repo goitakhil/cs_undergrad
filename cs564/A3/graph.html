@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.datum {
+			color: blue;
+			fill: blue;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>XY Graph</h1>
+	<a href="barchart.html">PREVIOUS</a>
+	<a href="tree.html">NEXT</a>
+	<p>
+		Below is an XY plot of closing stock value over time.
+	</p>
+	<svg></svg>
+	<script>
+		var width = 900;
+		var margins = {
+			"left": 75,
+			"right": 75,
+			"top": 10,
+			"bottom": 100
+		};
+		var height = 400;
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", height + margins.bottom + margins.top)
+			.attr("class", "frame")
+
+		d3.csv("data/stocktable.csv")
+			.then(data => {
+				var dateParser = d3.timeParse("%Y-%m-%d");
+				for (i = 0; i < data.length; i++) {
+					data[i].PDate = dateParser(data[i].Date);
+				}
+				var ymin = d3.min(data, d => +d.Close);
+				var ymax = d3.max(data, d => +d.Close);
+				var xmin = d3.min(data, d => d.PDate);
+				var xmax = d3.max(data, d => d.PDate);
+				var xAxis = d3.scaleTime()
+					.domain([xmin, xmax])
+					.rangeRound([0, width])
+				var yAxis = d3.scaleLinear()
+					.domain([ymin, ymax])
+					.range([height, 0])
+
+
+				svg.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle")
+					.attr("class", "datum")
+					.attr("cy", d => height - height * (d.Close / ymax) + margins.top)
+					.attr("cx", d => width * ((d.PDate - xmin) / (xmax - xmin)) + margins.left)
+					.attr("r", 2)
+
+				svg.append("g")
+					.attr("class", "axis")
+					.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+					.call(d3.axisBottom(xAxis))
+					.call(g => g.append("text")
+						.attr("x", width / 2)
+						.attr("y", 30)
+						.attr("fill", "#000")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Date"));
+
+				svg.append("g")
+					.attr("class", "axis")
+					.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+					.call(d3.axisLeft(yAxis))
+					.call(g => g.append("text")
+						.attr("x", -height / 2 + 50)
+						.attr("y", -(margins.left - 25))
+						.attr("fill", "#000")
+						.attr("transform", "rotate( 270 )")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Closing Value ($)"));
+			});
+	</script>
+</body>
+
+</html>

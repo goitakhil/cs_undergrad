@@ -1,0 +1,19 @@
+stmt    : assn ';' endcomm
+assn    : comment id comment '=' comment expr comment
+expr    : term comment addop comment expr
+        | term comment
+term    : unary fact comment mulop comment term
+        | unary fact
+fact    : id comment
+        | num comment
+        | '(' comment expr comment ')'
+addop   : '+'
+        | '-'
+mulop   : '*'
+        | '/'
+id      : id
+unary   : '-' unary
+	    | '-'
+comment : '{' text '}'
+		| null
+endcomm : '#' text

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Team Bass</title>
+    <h1>Rust PL</h1>
+    <ul>
+		<li><a href="index.html">Home</a></li>
+		<li><a href="docs.html">Documentation</a></li>
+        <li><a href="translators.html">Translators and Installation</a></li>
+        <li><a href="introProg.html">Introductionary Programs</a></li>
+        <li><a href="complexProg.html">More Complex Programs</a></li>
+        <li><a href="comparison.html">Comparison</a></li>
+        <li><a href="server.html">HTTP Server</a></li>
+    </ul>
+</head>
+
+<body>
+		<p>
+			There is an interpreter and build simulator available <a href="https://play.rust-lang.org">here</a>
+		</p>
+		<p>
+			You can download the compiler from <a href="https://www.rust-lang.org/en-US/downloads.html">here</a>
+		</p>
+		<p>
+			On Linux and Mac you can install the compiler by running: <br>
+			<code>curl -sSf https://static.rust-lang.org/rustup.sh | sh </code>
+		</p>
+		<p>
+			To compile a rust file called main.rs:<br>
+			<code>rustc main.rs</code><br>
+		</p><p>
+			To run the output program:<br>
+			<code>./main</code><br>
+		</p>
+		<p>
+Most rust projects utilize a build system called Cargo, which is built for rust. It handles the debug and release build settings.
+It accepts commands similar to those used by make.<br>
+<code><pre>
+cargo build             // builds the main program and all dependencies 
+cargo run               // builds the program and runs the main program
+cargo build --release   // builds with extra optimizations and no debug info
+cargo package           // packs the project into a source tarball
+cargo test              // builds if needed, then runs a test suite (written by user)
+cargo clean             // removes binaries and intermediate files
+</pre></code>
+		</p>
+
+</body>

@@ -1,0 +1,330 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass IEEEtran
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "Source Serif Pro"
+\font_sans "default" "Open Sans"
+\font_typewriter "default" "Inconsolata"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+HPC Utilization Visualization
+\end_layout
+
+\begin_layout Author
+Tyler Bevan 
+\begin_inset Newline newline
+\end_inset
+
+Phil Gore
+\end_layout
+
+\begin_layout Abstract
+HPC and research institutions have an unavoidable need to provide proof
+ of return on investment.
+ To forward this end, it is useful to be able to visually represent the
+ utilization of physical resources provided by those institutions.
+ Boise State University is no exception.
+ The Research Computing department of the Office of Information Technology
+ provides such resources.
+ The need for a simple visualization of the utilization by each department
+ and college at the university was expressed.
+ To fulfill this need, we developed a web page powered using D3.js and jQuery
+ for the frontend with Pandas and Flask on the server-side.
+ Using these tools, we were able to develop an easy to use interface with
+ fast, accurate access to live data from the R2 research cluster.
+\end_layout
+
+\begin_layout Subsection*
+Data Processing
+\end_layout
+
+\begin_layout Standard
+In order to make the client browser do as little work as possible, we focused
+ on making the server-side code as efficient as possible.
+ By doing so, the client would be able to request just the data it wants
+ in a format that needs no processing before use.
+ All data manipulation to format it to be consumed by D3 is being done in
+ Python using the Pandas data science library.
+ All data is being stored in memory and updated every few minutes from the
+ R2 databases.
+\end_layout
+
+\begin_layout Standard
+The R2 data is stored in two MySQL databases.
+ One is controlled by a software called XDMod.
+ This software maps utilization to users, departments, and colleges.
+ We are not using its utilization data because it is not fully up to date
+ and is missing some historical information.
+ However, its database contains a table of those mappings which we used
+ to convert job data.
+\end_layout
+
+\begin_layout Standard
+The compute job data is stored in a database managed by SLURM.
+ It is the scheduler responsible for queuing, running, and tracking jobs
+ and resources.
+ It contains records of all jobs run including information such as en-queue
+ time, de-queue time, end time, size, user, and queue.
+ This contains all the information we need to generate usage reports.
+ However, we are not interested in the jobs themselves, but in the total
+ usage at points in time.
+\end_layout
+
+\begin_layout Standard
+We have to generate those points manually.
+ We used a function to walk through the time series and find what the total
+ size of all running jobs at that time point is.
+ To make that function fast, as Python is not known for its speed, we used
+ the Numba library.
+ This allows us to map c data types to the function parameters and compile
+ the function Just-In-Time.
+ That lets the calculation run much closer to native code speeds.
+ Importing the entire dataset from scratch takes around 15 seconds.
+ Those updates are done asynchronously from the API.
+\end_layout
+
+\begin_layout Standard
+The API for the server code is RESTful, meaning it is stateless and uses
+ json as its data transfer format.
+ We used URL form encoding to format the requests.
+ The API is provided using the popular Flask framework.
+ Pandas has functionality built in to export data as dictionaries or json
+ blobs.
+ Using those in conjunction with the Flask 'jsonify' function made exporting
+ the data simple.
+\end_layout
+
+\begin_layout Subsection*
+Front End
+\end_layout
+
+\begin_layout Standard
+The web facing site is hosted on a different server than the data server
+ API.
+ The API calls are proxied through the web server for security reasons.
+ The front end was built using D3 to render the svg objects with jQuery
+ for some DOM manipulation functionality.
+ The layout was built using CSS flexbox and grid objects.
+ This allows us to reliably resize any section without breaking the overall
+ orientation of the sections of the page.
+\end_layout
+
+\begin_layout Standard
+For the usage over time, we chose to use a line graph (figure 1).
+ This works best because the data is over a time series.
+ We considered using a stacked line graph, but we wanted to have colleges
+ and departments on the same graph and they don't add up to the total.
+ We decided to use columns of selection boxes along the left margin for
+ selecting different series to show in the graph.
+ This is a familiar layout used by many websites, so it feels natural for
+ most users.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename image0.jpg
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Main Page with Usage Graphs
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also wanted to show what the total percentage of use was during that
+ time period for all colleges and departments.
+ We chose to use pie charts for this because they always add up to 100%
+ and are usually dominated by a small number of large categories.
+ This makes it easy to use and interpret.
+ Tooltips are used to show the actual data values, as the graphs are too
+ small to reliably add floating captions.
+\end_layout
+
+\begin_layout Standard
+We originally used pie charts to show the current disk utilizations for
+ the home and scratch spaces, but after input from our peers we chose to
+ change them to simple bar gauges to save space.
+ Because we only show two values: (1) used and (2) empty, it was a waste
+ of space and not any more readable.
+\end_layout
+
+\begin_layout Standard
+The right margin shows the legend for all currently enabled series on the
+ graph.
+ The date range can be easily changed using two HTML date picker fields.
+ Each series is loaded asynchronously when the user selects a checkbox.
+ This causes the page to load quickly and feel native as it never has to
+ refresh.
+\end_layout
+
+\begin_layout Standard
+We chose to separate the usage from the average wait times to make the page
+ cleaner (figure 2).
+ We did not want to force a page refresh when swapping tabs, so they are
+ both located on the same page.
+ Only one can be shown at a time, but it makes the interface less busy.
+ The controls for the wait graph only include date range.
+ The main problem we ran into was that D3 will only update an svg that is
+ currently rendered.
+ If it is hidden, then the range and size are wrong after switching tabs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename image1.jpg
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Wait Times Graph
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To solve that problem, we used a common web design technique.
+ We changed the code so that the hidden graph is not disabled, but rather
+ moved far off the screen such that it cannot be viewed.
+ That caused D3 to update it correctly.
+ In addition, it makes the swap between tabs very fast, as the image does
+ not have to be rendered again.
+\end_layout
+
+\begin_layout Subsection*
+Conclusions
+\end_layout
+
+\begin_layout Standard
+Using data science, web design, and visualization techniques, we were able
+ to create a highly usable and efficient visualization to be used by research
+ stakeholders and HPC staff.
+ Feedback has been positive so far, and staff from Research Computing will
+ continue to use and maintain the web page; as well as extend it in the
+ future.
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,41 @@
+Feedback comments for -> TYLERBEVAN,
+
+Grading Scripts:
+================
+-> passing grader, good job.
+
+Code Quality:
+================
+-> Correctly creating required directories.
+-> Correctly building application.
+-> Correct loop conditions from smallest to largest file size.
+-> Correctly executing both options of application.
+-> Correct file diff validation.
+-> +10 points, Correctly finding execution times.
+
+README:
+================
+-> -5 points, No discussion section, no problem discussed, did not follow template...
+
+
+======================
+Grade: 105/100.
+======================
+50/50  Grading-Scripts.
+-0     passed...
+40/40  Code-Quality.
+-0     code formatting
+-0     code comments/doc
+-0     code modularity
+-0     code semantics
+5/10   README.md-File.
+-5     used template
+-0     grammar/spelling
+-0     correct statements
+-0     sources
+0      Late-Penalty.
+10     Extra Credit.
+======================
+
+Cheers,
+Joey.

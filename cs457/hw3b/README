@@ -1,0 +1,60 @@
+Tyler Bevan
+HW 3b
+
+To modify this application to use iterative deepening search instead of breadth
+first search, I added a loop around the search loop in Driver.java to increment
+the maximum depth of search until a solution is found. In addition, I changed
+the data structure to be a stack instead of a queue so that the search would
+be depth first. The table below shows the results of the requested example
+random problems.
+
+
+Problem  Steps  Depth  Expanded Nodes
+123
+485      10     4      50
+76
+
+23
+156      10     4      57
+478
+
+243
+1 6      10     6      159
+758
+
+23 
+185      20     8      389
+476
+
+123
+4 6      20     2      15
+758
+
+26 
+135      20     10     1129
+478
+
+182
+463      30     15     8123
+75
+
+12 
+463      30     4      49
+758
+
+ 26
+138      30     12     2360
+457
+
+253
+746      100    15     8310
+18
+
+356
+7 8      100    28     165358
+124
+
+721
+586      100    40     839564
+34
+

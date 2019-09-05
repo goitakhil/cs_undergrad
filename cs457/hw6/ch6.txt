@@ -1,0 +1,39 @@
+Chapter 6
+Tyler Bevan
+
+6.1
+    This problem has n(6(n-2)) valid solutions.
+    With 4 colors there are 48 solutions.
+    With 2 colors there are 0 solutions.
+
+6.3
+a   Given the grid of possible word locations, start with the first available word space
+    and insert a random word of the correct length. A depth first search would be the
+    most appropriate, since the branching factor is the size of the dictionary. The
+    heuristic is the number of remaining word intersections without both words filled.
+
+b   The problem is formulated as a constraint grid with each letter as a variable. The
+    domain of each variable is the alphabet. The constraints are that each word space
+    contain a valid word from the dictionary.
+
+    The CSP solution will be a better solution. Using the alphabet as the domain makes
+    arc consistency an option, as using the dictionary as the domain is much too large
+    to reasonably track.
+
+6.8
+    Coloring Search Order:
+    A1 = R
+    H  = G
+    A4 = R
+    F1 = R
+    A2 = B
+    F2 = R
+    A3 has no valid options
+    Backtrack to A2
+    A2 has no other options
+    Backtrack to A4
+    A4 = B
+    A3 = R
+    T  = B
+
+    Final State  (A1,R),(A2,B),(A3,R),(A4,B),(H,G),(T,B),(F1,R),(F2,R)

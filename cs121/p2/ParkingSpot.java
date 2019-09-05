@@ -1,0 +1,120 @@
+/**
+ * Represents a parking spot in a city.
+ * @author amit (original code)
+ * @author mvail (removed max duration variable and associated methods, conversion from double to int coordinates)
+ * @author Tyler Bevan (added getDistance and getCost methods)
+ */
+public class ParkingSpot
+{
+    private String street;
+    private int locationX;
+    private int locationY;
+    private boolean available;
+    private double charge;
+    /**
+     * The minimum time interval which can be paid for.
+     */
+    public final int INTERVAL = 10; // minutes
+
+    /**
+     * The default charge for each INTERVAL minutes
+     */
+    public final double DEFAULT_CHARGE = 0.25;
+
+
+    /**
+     * Constructor: creates a parking spot object with specified values.
+     * @param street is the street on which the parking spot is located
+     * @param locationX is the x (E-W) coordinate
+     * @param locationY is the Y (N-S) coordinate
+     */
+    public ParkingSpot(String street, int locationX, int locationY) {
+    	this.street = street;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        available = true;
+        charge = DEFAULT_CHARGE;
+    }
+
+    /**
+	 * Checks whether the parking spot is available
+     * @return true if spot is available
+     */
+    public boolean isAvailable() {
+        return available;
+    }
+
+    /**
+	 * return the cost for one time interval
+     * @return the charge
+     */
+    public double getCharge() {
+        return charge;
+    }
+
+    /**
+	 * Set the charge for one time interval
+     * @param charge the charge to set
+     */
+    public void setCharge(double charge) {
+        this.charge = charge;
+    }
+
+    /**
+	 * Sets the space to be available or not available
+     * @param available true is the parking spot is available, false otherwise
+     */
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    /**
+	 * Get the street on which the parking space is located
+     * @return the street
+     */
+    public String getStreet() {
+        return street;
+    }
+
+    /**
+	 * Get the east-west coordinate of the parking spot
+     * @return the locationX
+     */
+    public int getLocationX() {
+        return locationX;
+    }
+
+    /**
+	 * Get the north-south coordinate of the parking spot
+     * @return the locationY
+     */
+    public int getLocationY() {
+        return locationY;
+    }
+
+    /* Returns a String representation of the parking spot
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "ParkingSpot [street=" + street + ", locationX=" + String.format("%4d", locationX)
+                + ", locationY=" + String.format("%4d", locationY) + ", available=" + available + "]";
+	}
+     
+    /**
+     * Calculate the cost of this spot for a given number
+     * of minutes.
+     * @param time
+     * @return parkingCost
+     */
+    public double getCost(int time){
+    	double parkingCost = charge * Math.ceil(time/10.0);
+    	return parkingCost;
+    }
+    
+    public int getDistance(int driverX, int driverY){
+    	int distance = (Math.abs(locationX - driverX))+(Math.abs(locationY- driverY));
+    	return distance;
+    }
+}

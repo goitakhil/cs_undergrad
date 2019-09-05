@@ -1,0 +1,26 @@
+==136323== NVPROF is profiling process 136323, command: ./bin/matrix_matrix_cuda etc/MatrixC.txt etc/MatrixC.txt
+Read matrix file: etc/MatrixC.txt 
+Read matrix file: etc/MatrixC.txt 
+==136323== Profiling application: ./bin/matrix_matrix_cuda etc/MatrixC.txt etc/MatrixC.txt
+==136323== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:  100.00%  705.60us         1  705.60us  705.60us  705.60us  matrix_matrix_mult(CudaMatrix*, CudaMatrix*, CudaMatrix*, int)
+      API calls:   99.37%  255.50ms         6  42.583ms  6.5500us  255.37ms  cudaMallocManaged
+                    0.28%  711.42us         1  711.42us  711.42us  711.42us  cudaDeviceSynchronize
+                    0.15%  395.68us        94  4.2090us     134ns  164.32us  cuDeviceGetAttribute
+                    0.08%  216.86us         1  216.86us  216.86us  216.86us  cuDeviceTotalMem
+                    0.07%  170.08us         6  28.346us  9.9860us  61.415us  cudaFree
+                    0.04%  92.513us         1  92.513us  92.513us  92.513us  cudaLaunch
+                    0.01%  35.268us         1  35.268us  35.268us  35.268us  cuDeviceGetName
+                    0.00%  5.2730us         4  1.3180us     177ns  4.3090us  cudaSetupArgument
+                    0.00%  2.6800us         3     893ns     158ns  2.0520us  cuDeviceGetCount
+                    0.00%     994ns         2     497ns     262ns     732ns  cuDeviceGet
+                    0.00%     814ns         1     814ns     814ns     814ns  cudaConfigureCall
+
+==136323== Unified Memory profiling result:
+Device "Tesla P100-PCIE-12GB (0)"
+   Count  Avg Size  Min Size  Max Size  Total Size  Total Time  Name
+       2  32.000KB  4.0000KB  60.000KB  64.00000KB  7.968000us  Host To Device
+       2  32.000KB  4.0000KB  60.000KB  64.00000KB  6.912000us  Device To Host
+       1         -         -         -           -  255.8400us  Gpu page fault groups
+Total CPU Page faults: 2

@@ -1,0 +1,23 @@
+########################################
+#        Language Assignment 5         #
+#             Tyler Bevan              #
+#           21 November 2016           #
+########################################
+
+Porting this program from Java to C# was easier than I had expected.
+I used Visual Studio Community 2016 to write the code for C#. Because
+C# is a Microsoft language, designing a gui was very simple. I just
+had to drag and drop elements into the designer. Where the code itself
+was involved, it was easy as well. The only problem I ran into was
+the version of .NET supported by mono on onyx is different than the
+version Visual Studio wanted to use. It was easily overridden in the
+VS settings for the project.
+
+C# and Java have extremly similar syntax. In fact, I as surpised I could
+reuse the exact same variable definitions and assignments. Imports use
+different keywords, but the syntax is the same.
+
+It seems that C# has reused almost all of the Java syntax in its grammer.
+C# and Java are both dependant on a runtime to work properly, and have
+their own windowing and graphics packages.
+

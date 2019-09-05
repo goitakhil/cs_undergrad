@@ -1,0 +1,43 @@
+#!/usr/bin/sage
+# vi:syntax=python
+import sys
+load('ecclib.sage')
+
+Ra = 856635008816114236287228889862706211601023274703568825790281732493598811489183201347792967433515761143227907320020567329633259067977601308187753
+na = 1381
+Rb = 156859371482229826252298297838428556920000929444959542317698727578479768379396635839278707779409816182901338800677690730823247
+nb = 1373
+Rc = 262503444433443202297590751101961074929610529338524795169358249999355359738922201372169082275693161097217696397422937901342947981249
+nc = 1423
+
+X = 124792453217009313288174172611057041111137984760087027709345638506820260970927478429746680194173939365186360426644272858066253877240870894593592
+
+Pa = gcd(Ra,Rc)
+Pc = Pa
+Qa = Ra/Pa
+Qc = Rc/Pc
+print(Pa*Qa == Ra)
+print(Pc*Qc == Rc)
+pout1 = lcm(Pa-1,Pa+1)
+qout1 = lcm(Qa-1,Qa+1)
+gRa = lcm(pout1,qout1)
+pout2 = lcm(Pc-1,Pc+1)
+qout2 = lcm(Qc-1,Qc+1)
+gRc = lcm(pout2,qout2)
+
+ma = (1/na) % gRa
+mc = (1/nc) % gRc
+print(ma)
+print(mc)
+E1 = (X^2-4) % Ra
+pointdecryption1 = [X,1]
+lucgpdecryption1 = [E1,Ra]
+decryptedPoint1 = LUCexp(pointdecryption1,ma,lucgpdecryption1)
+print(decryptedPoint1[0])
+E2 =(decryptedPoint1[0]^2-4) % Ra
+pointdecryption2 = [decryptedPoint1[0],1]
+lucgpdecryption2 = [E2,Ra]
+decryptedPoint2 = LUCexp(pointdecryption2,ma,lucgpdecryption2)
+MTest = decryptedPoint2[0]
+print(MTest)
+ASCIIDepad(MTest)

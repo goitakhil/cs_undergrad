@@ -1,0 +1,38 @@
+Feedback comments for -> TYLERBEVAN,
+
+Grading Scripts:
+================
+-> passing grader, good job.
+
+Code Quality:
+================
+-> required macros used, good.
+-> required targets implemented correctly, good.
+-> required gcc flags & Makefile features used, good.
+
+README:
+================
+-> Good README. Follow the same format for future projects.
+-> -MMD basically saves a time stamp on when files were last saved. When you try and compile again, if the current time stamp's don't match the saved, then the files will be compiled again. If the time stamps were the same the files will not compiled, thus saving time with large projects with 100's of files.
+
+
+======================
+Grade: 100/100.
+======================
+50/50  Grading-Scripts.
+-0     passed...
+40/40  Code-Quality.
+-0     code formatting
+-0     code comments/doc
+-0     code modularity
+-0     code semantics
+10/10  README.md-File.
+-0     used template
+-0     grammar/spelling
+-0     correct statements
+-0     sources
+0      Late-Penalty.
+======================
+
+Cheers,
+Joey.

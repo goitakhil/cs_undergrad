@@ -1,0 +1,9 @@
+Anne Brinegar
+Grade: 1
+
+Comments:
+You need to make the obj directory from the Makefile.
+
+It looks like you have some failing tests. Please look into that before we start performance testing.
+
+Your binary files belon in the bin directory.

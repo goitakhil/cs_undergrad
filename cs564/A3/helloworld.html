@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.bar {
+			color: blue;
+			fill: blue;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Hello World</h1>
+	<a href="barchart.html">NEXT</a>
+	<p>
+		Below is the histogram of data imported from the words list.
+	</p>
+	<svg></svg>
+	<script>
+		var width = 900;
+		var margins = {
+			left: 75,
+			right: 50,
+			top: 10,
+			bottom: 100
+		}
+		var height = 400;
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", height + margins.bottom)
+			.attr("class", "frame")
+
+		d3.dsv("\t", "data/words.txt").then(data => {
+			var min = d3.min(data, d => +d.frequency);
+			var max = d3.max(data, d => +d.frequency);
+			var xAxis = d3.scaleLinear()
+				.domain([max, min])
+				.rangeRound([width, 0])
+			var yAxis = d3.scaleLinear()
+				.range([height, 0])
+			var histo = d3.histogram()
+				.value(d => +d.frequency)
+				.thresholds(40)
+			var bins = histo(data);
+			var bars = bins.length;
+			yAxis.domain([0, d3.max(bins, d => d.length)])
+
+			svg.selectAll("rect")
+				.data(bins)
+				.enter()
+				.append("rect")
+				.attr("class", "bar")
+				.attr("y", d => height - height * (d.length / max))
+				.attr("height", d => height * (d.length / max))
+				.attr("width", width / bars - 1)
+				.attr("transform", (d, i) => "translate(" + [width / bars * i + margins.left, 0] + ")");
+
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + margins.left + "," + (height) + ")")
+				.call(d3.axisBottom(xAxis).ticks(bars / 2))
+				.call(g => g.append("text")
+					.attr("x", width / 2)
+					.attr("y", 30)
+					.attr("fill", "#000")
+					.attr("font-weight", "bold")
+					.attr("text-anchor", "end")
+					.text("Count"));
+
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(" + margins.left + ",0)")
+				.call(d3.axisLeft(yAxis))
+				.call(g => g.append("text")
+					.attr("x", -height / 2)
+					.attr("y", -(margins.left - 25))
+					.attr("fill", "#000")
+					.attr("transform", "rotate( 270 )")
+					.attr("font-weight", "bold")
+					.attr("text-anchor", "end")
+					.text("Words"));
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+*********************
+* Project 2: Clocks *
+* Tyler Bevan       *
+* 22 Feb, 2016      *
+*********************
+
+README
+
+OVERVIEW:
+
+ This program simulates the drift over time
+ of various types of time pieces.
+
+
+INCLUDED FILES:
+
+ * AtomicClock.java - source file
+ * Clock.java - source file
+ * ClockSimulation.java - source file
+ * CuckooClock.java - source file
+ * GrandfatherClock.java - source file
+ * Sundial.java - source file
+ * Time.java - source file
+ * TimePiece.java - source file
+ * WristWatch.java - source file
+ * README - this file
+
+
+COMPILING AND RUNNING:
+
+ This program can be compiled by running the following command
+ from the directory containing the source files.
+ 
+ $ javac ClockSimulation.java
+ 
+ Note:  This program relies on the Bag class that was provided by
+ the instructor. The program will fail to compile if this class is not
+ available.
+ 
+ To run the simulation, execute the following command in the same
+ directory:
+ 
+ $ java ClockSimulation
+ 
+ Output is printed to the terminal.
+ 
+
+PROGRAM DESIGN AND IMPORTANT CONCEPTS:
+
+ This program makes heavy use of abstraction and inheritance. Each type
+ of clock inherits from the clock class, which uses the time class and implements the
+ TimePiece interface.  This allows the program to contain multiple types of clocks
+ without duplicating large amounts of code.
+ 
+ Upon execution, the simulation runs each clock for specified amounts of time
+ and reports the reading from the clock and calculates the drift.
+ 
+
+TESTING:
+
+ Because the program accepts no input, there is little room for operator error.
+ Considering the classes themselves, encapsulation is used everywhere possible
+ to prevent undesired interaction between classes.
+
+
+DISCUSSION:
+ 
+ At first it was difficult to understand how the different levels of inheritance
+ interacted with each other.  After completing all the classes it began to make sense.
+ One big advantage is that we can make use of the Bag class by instantiating it using a
+ common ancestor or interface as the type.
+ 
+ 

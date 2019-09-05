@@ -1,0 +1,67 @@
+Tyler Bevan
+Project 2 - grocery bagging
+
+Staring out with this project, I used a bit mask to determine if two items were
+in conflict with each other. So the first item would be in the least
+significant bit, and a 1 indicates a conflict. This seemed like an easy way to
+keep track of conflicts, since I can just do a bitwise 'and' operation to see
+if a bag and an item are compatible. This worked ok, but I ran into a lot of
+hard to find bugs in the process. However, after a lot of searching I was able
+to get my program working decently well with depth first search.
+
+To add forward arc-consistency to the program, I gave each item a stack to
+store previous states in. This way I could just push a new list of valid
+bags onto the stack, and pop it off when I needed to backtrack. As with the
+bit shifting, it worked, but seemed unreliable. As I tested the program using
+both provided test cases and a couple of my own, it became clear that sometimes
+the arc-consistency would prune branches that it shouldn't. I only knew this
+because some tests would fail, but only with arc enabled.
+
+Because I was having strange issues with both systems, I decided to use a more
+object oriented approach. My program is written in python 3, so it works better
+anyway. I modified my objects to contain sets instead of integers. Python's 
+way of handling large integers is robust, but not particularly fast. This is
+mostly due to the way it implements unlimited precision. Comparing numbers
+bitwise is not an O(1) operation if the numbers are large.
+
+Python uses sets that implement most operators of set theory, so it is easy
+to check if an item is in a set or not. It also makes it easy to iterate over
+the items in a set. At first I used the set to store the indicies of the items
+and bags in my master arrays, but I realized that if I added the objects
+themselves to the list it would store the pointers. This way, when I iterate
+over the valid bags for an item, I don't have to do any lookups to find the
+right object. This ends up being just as fast in the python interpreter.
+
+It turned out that it also made arc consistency much easier to implement. I
+still used a stack to store previous states, but I only stored items that I
+removed from the set in the stack. Python handles Null objects rather nicely,
+so it is easy to store a Null operation in the stack if I remove a bag that
+is already removed from the item. This made arc consistency much more stable.
+
+It was fairly easy to implement local search with my new OO setup. I assigned
+each item to a bag using a random number, and then move a random item to a
+better spot until there are no conflicts. To ensure that the search makes
+moves that are actually better than the current, I used the number of violated
+conflicts added to how much over the bag size limit it is. That way, the
+optimal solution will have a "score" of 0. The search is not subject to local
+maxima problems, as all solutions are considered equal as long as they are
+valid. This search is somewhat slower than the DFS is most cases, but if the
+random scatter gets lucky it can run really fast. I can see why it may be more
+appropriate to perform lots of parallel local searches than a DFS for certain
+types of problems.
+
+Arc consistency still doesn't speed up the calculation in many cases, but it
+can in the right circumstances. To speed up the program, I tried to convert
+all of the code into C. I did get it working to a small degree, but in the end
+the difficulty of finding bugs in C code outweighed my desire for more speed.
+However, because my code is written in pure OO python it benefits nicely from
+any of the just-in-time compilers available for python. It performs several 
+times faster using pypy than cpython. There are other libraries available to
+do the same thing. I considered including a portable version of pypy with my 
+project. The run scripts included use the system's python 3, since the 
+mobile pypy installation is 120MB
+
+This project was challenging, but most of the problems were more related to the
+code itself than the algorithms. I was particularly surprised at how well local
+search can perform under the right circumstances, although a proper DFS still
+wins out.

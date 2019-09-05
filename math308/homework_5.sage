@@ -1,0 +1,36 @@
+#!/usr/bin/sage
+# vi:syntax=python
+
+load('ecclib.sage')
+
+def main():
+    # Save the public parameters of the key:
+    a = 4569782456273849
+    b = 74578265973825694738
+    p = 164516845864567592349187678956932587156973824569837657473
+    G = [a,b,p]
+    g = [48563875638, 59953686086232350377099851919349194342354278013502470154]
+    b = [94505880155199340954270580844602804762931528214881553767, 125066642042178110526107700200751399553923146040555130047]
+    # Private key x is unknown.
+    tolerance = 49
+    
+    # Factor the order of the base point g:
+    print ( factor(findptOrder(g, G)) )
+    
+    # Message Packets
+    e = [93639666479598242411823008371484237433314325218557988665, 52243374701368396864838008344430211295076041963702946225]
+    y = [141014893828387250204699736658837464619673828728217488819, 54503942085017207420659567572818024668020348976893792817]
+    
+    # Use HPS attack on private key:
+    r = HPSonEC( y, g, G, [[2,1],[3,1],[179,1],[769,1], [99597802815676113473680829865485023921426165084723,1]] )
+    print(r)
+    
+    # Compute decoding point:
+    key = ECTimes(b,r,G)
+    
+    # Decode message with generated key:
+    message = ECUnembed( [ECAdd( e,ECInverse(key,G),G )],tolerance )
+    print(message)
+
+main()
+

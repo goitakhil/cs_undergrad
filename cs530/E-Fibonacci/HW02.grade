@@ -1,0 +1,8 @@
+Gregory Brasier
+Grade: 1
+
+Comments:
+make test did not work out of the gate.
+I had to make a directory. You should add -mkdir obj 
+to the beginning of your target that compiles any object file.
+

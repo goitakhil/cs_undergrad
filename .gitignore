@@ -1,0 +1,9 @@
+*.vscode
+launch.json
+*.class
+cs410/target
+*.classpath
+*.settings
+*.project
+.ipynb_checkpoints
+.~*

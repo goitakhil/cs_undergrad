@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/d3.v5.js"></script>
+	<style>
+		.line {
+			stroke-width: 4;
+			fill: none;
+		}
+
+		.axis {
+			font-size: 15px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Graph using internet csv</h1>
+	<a href="map.html">PREVIOUS</a>
+	<a href="resizemap.html">NEXT</a>
+	<p>
+		Below is a plot importing data from a csv hosted on github.
+	</p>
+	<svg></svg>
+	<script>
+		var width = 1500;
+		var margins = {
+			"left": 75,
+			"right": 100,
+			"top": 20,
+			"bottom": 100
+		};
+		var height = 700;
+
+		var svg = d3.select('svg')
+			.attr("width", width + margins.left + margins.right)
+			.attr("height", height + margins.bottom + margins.top)
+			.attr("class", "frame")
+		// Inflation rate
+		// https://raw.githubusercontent.com/datasets/inflation/master/data/inflation-consumer.csv
+		d3.csv("https://raw.githubusercontent.com/datasets/inflation/master/data/inflation-consumer.csv", d => ({ "country": d.Country, "year": new Date(+d.Year, 0, 1), "inflation": d.Inflation }))
+			.then(fulldata => {
+				// Filter out countries we aren't graphing
+				var countries = ["United States", "Japan", "United Kingdom"];
+				var data = fulldata.filter(d => countries.indexOf(d.country) >= 0);
+
+				var ymin = d3.min(data, d => Math.min(d.inflation));
+				var ymax = d3.max(data, d => Math.max(d.inflation));
+				var xmin = d3.min(data, d => d.year);
+				var xmax = d3.max(data, d => d.year);
+				var xAxis = d3.scaleTime()
+					.domain([xmin, xmax])
+					.rangeRound([0, width])
+				var yAxis = d3.scaleLinear()
+					.domain([ymax, ymin])
+					.range([0, height])
+
+				var d3line = d3.line()
+					.curve(d3.curveCardinal)
+					.x(d => xAxis(d.year) + margins.left)
+					.y(d => yAxis(d.inflation) + margins.top)
+
+				// These are the lines
+				svg.append("path")
+					.attr('d', d3line(data.filter(d => d.country === "United States")))
+					.attr("class", "line")
+					.style("stroke", "blue")
+				svg.append("path")
+					.attr('d', d3line(data.filter(d => d.country === "United Kingdom")))
+					.attr("class", "line")
+					.style("stroke", "green")
+				svg.append("path")
+					.attr('d', d3line(data.filter(d => d.country === "Japan")))
+					.attr("class", "line")
+					.style("stroke", "orange")
+				
+				// These are the axis markings and labels
+				svg.append("g")
+					.attr("class", "axis")
+					.attr("transform", "translate(" + (margins.left) + "," + (height + margins.top) + ")")
+					.call(d3.axisBottom(xAxis))
+					.call(g => g.append("text")
+						.attr("x", width / 2)
+						.attr("y", 30)
+						.attr("fill", "#000")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Year"));
+				svg.append("g")
+					.attr("class", "axis")
+					.attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+					.call(d3.axisLeft(yAxis))
+					.call(g => g.append("text")
+						.attr("x", -height / 2 + 50)
+						.attr("y", -(margins.left - 25))
+						.attr("fill", "#000")
+						.attr("transform", "rotate( 270 )")
+						.attr("font-weight", "bold")
+						.attr("text-anchor", "end")
+						.text("Inflation (%)"));
+
+				// This block is the legend
+				var legend = svg.append("g")
+					.attr("class", "legend")
+					.attr("transform", "translate(" + (width * .75 + margins.left) + "," + margins.top + ")")
+					.style("outline", "thin solid black")
+				legend.append("text")
+					.attr("transform", "scale(1.3)")
+					.text("United States")
+					.style("stroke", "blue")
+					.style("fill", "blue")
+					.attr("x", 10)
+					.attr("y", 10)
+				legend.append("text")
+					.attr("transform", "scale(1.3)")
+					.text("United Kingdom")
+					.style("stroke", "green")
+					.style("fill", "green")
+					.attr("x", 10)
+					.attr("y", 30)
+				legend.append("text")
+					.attr("transform", "scale(1.3)")
+					.text("Japan")
+					.style("stroke", "orange")
+					.style("fill", "orange")
+					.attr("x", 10)
+					.attr("y", 50)
+
+
+			});
+	</script>
+</body>
+
+</html>

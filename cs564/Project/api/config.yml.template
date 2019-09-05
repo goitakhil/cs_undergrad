@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+slurmdb:
+    name: slurm_acct_db
+    username: slurm_db_user
+    password: slurm_db_password
+
+xdmoddb:
+    name: mod_hpcdb
+    username: xdmod_db_user
+    password: xdmod_db_password

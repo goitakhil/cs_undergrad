@@ -1,0 +1,134 @@
+<head>
+    <link href='/css/report.css' rel="stylesheet" type="text/css"> </link>
+    <script src='/js/jquery-3.3.1.min.js'></script> 
+    <script src='/js/d3.v5.min.js'></script> 
+    <script src='/js/bar-chart.js'></script> 
+    <script src='/js/pi-chart.js'></script> 
+    <script src='/js/disk-chart.js'></script> 
+    <script src='/js/report.js'></script> 
+</head>
+<body>
+    <div id="header-container">
+        <div id="header-bg">
+        <div id="header" class="header">
+            <img src="/images/logo.png" class="logo"></img>
+        </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="bar-charts" class="charts">
+            <h1>
+                R2 Cluster Usage Reports
+            </h1>
+            <div class="tab">
+                <button class="tablinks active" onclick="openChart(event, 'utilization')">
+                    Core Utilization
+                </button>
+                <button class="tablinks" onclick="openChart(event, 'wait-times')">
+                    Wait Times
+                </button>
+            </div>
+            <div id="date-list">
+                <div class="date-input">
+                    <label class="form-label">Start: </label>
+                    <input class="date" type="date" id="beginning" name="beginning"></input>
+                </div>
+                <div class="date-input">
+                    <label class="form-label">End: </label>
+                    <input class="date" type="date" id="end" name="end"></input>
+                </div>
+                <button type="button" id="time-submit" onclick="redraw()">
+                     Update Time
+                </button>
+            </div>
+            <div id="utilization" class="tabcontent">
+                <div id="util-graph" class="svg-container">
+                    <svg class="bar-chart"></svg>
+                    <div class="usage-filters">
+                        <div class="filter-list">
+                            <h4> Colleges and Divisions</h4>
+                            <div id="college-list">
+                            </div>
+                        </div>
+                        <div class="filter-list">
+                            <h4> Departments </h4>
+                            <div id="department-list">
+                            </div>
+                        </div>
+                    </div>
+                    <a hidden id="url">/api/v1/total</a>
+                    <div class="sidebar">
+                        <h4> Legend </h4>
+                        <div id="usage-legend" class="legend"></div>
+                    </div>
+                    <div id="stats">
+                        <div id="usage-pi-charts">
+                            <div id="util-by-col" class="svg-container">
+                                <p id="current-disk-stats"> 
+                                    Utilization by College
+                                </p>
+                            <a hidden id="url">/api/v1/percent/college</a>
+                            <svg class="pi-chart"></svg>
+                        </div>
+                        <div id="util-by-dept" class="svg-container">
+                            <p id="current-disk-stats"> 
+                                Utilization by Department
+                            </p>
+                            <a hidden id="url">/api/v1/percent/dept</a>
+                            <svg class="pi-chart"></svg>
+                        </div>
+                    </div>
+                    <div id="disk-stats">
+                        <div id="scratch-usage">
+                            <p class="disk-label">Scratch Usage</p>
+                            <svg class="disk-chart"></svg>
+                        </div>
+                        <div id="home-usage">
+                            <p class="disk-label">Home Usage</p>
+                            <svg class="disk-chart"></svg>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div id="wait-times" class="tabcontent">
+                <div id="wait-time-graph" class="svg-container">
+                    <a hidden id="url">/api/v1/wait</a>
+                    <svg class="bar-chart"></svg>
+                </div>
+                <div>
+                    <h4> Legend </h4>
+                    <div id="wait-time-legend" class="legend"></div>
+                </div>
+            </div>
+        </div>
+<!--
+        <div id="pi-charts" class="pi-charts">
+            <h4 id="current-disk-stats"> 
+            Current Disk Usage on R2
+            </h4>
+	    <hr/>
+            <div id="disk-pi-charts">
+            </div>
+            <div class="pi-legend">
+                <div class="disk-legend legend-item">
+                    <div class="legend-color" style="background: rgb(214, 67, 9)"></div>
+                    <p class="legend-name">
+                    Free
+                    </p>
+                </div> 
+                <div class="disk-legend legend-item">
+                    <div class="legend-color" style="background: rgb(0, 51, 160)"></div>
+                    <p class="legend-name">
+                    Used
+                    </p>
+                </div> 
+            </div>
+        </div>
+-->
+    </div>
+    <div class="tooltip" style="opacity:0;"></div>
+    <script>
+        setDefaults();
+    </script>
+</body>
